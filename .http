@@ -1,0 +1,11 @@
+POST http://localhost:3000/usuario HTTP/1.1
+content-type: application/x-www-form-urlencoded
+
+
+{
+    "nombre": "test1",
+    "email": "test1@gmail.com",
+    "password": "test1",
+    "img": null,
+    "role": "User_Role",
+}
