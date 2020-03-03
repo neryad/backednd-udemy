@@ -8,26 +8,33 @@ var Usuario = require('../models/usuario');
 // Obtener usuarios
 // ==================================================
 app.get('/', (req, res, next) => {
-  Usuario.find({}, 'nombre email img role').exec((err, usuarios) => {
-    if (err) {
-      return res.status(500).json({
-        ok: false,
-        mensaje: 'Erro cargando usuario',
-        errors: err
+  var desde = req.query.desde || 0;
+  desde = Number(desde);
+  Usuario.find({}, 'nombre email img role')
+    .skip(desde)
+    .limit(5)
+    .exec((err, usuarios) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: 'Erro cargando usuario',
+          errors: err
+        });
+      }
+      Usuario.count({}, (err, conteo) => {
+        res.status(200).json({
+          ok: true,
+          usuarios: usuarios,
+          Total: conteo
+        });
       });
-    }
-
-    res.status(200).json({
-      ok: true,
-      usuarios: usuarios
     });
-  });
 });
 
 // ==================================================
 // Actullizar usuarios
 // ==================================================
-app.put('/:id',  miAuteitacion.verificaToken , (req, res) => {
+app.put('/:id', miAuteitacion.verificaToken, (req, res) => {
   var id = req.params.id;
   var body = req.body;
 
@@ -75,7 +82,7 @@ app.put('/:id',  miAuteitacion.verificaToken , (req, res) => {
 // ==================================================
 // Agregar usuarios
 // ==================================================
-app.post('/', miAuteitacion.verificaToken ,(req, res) => {
+app.post('/', miAuteitacion.verificaToken, (req, res) => {
   var body = req.body;
   var usuario = new Usuario({
     nombre: body.nombre,
