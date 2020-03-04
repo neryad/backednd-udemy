@@ -5,6 +5,13 @@
 
 // Inicar variables
     var app = express();
+//Cors
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.header("Access-Control-Allow-Methods",  "POST, GET, DELETE, PUT, OPTIONS");
+        next();
+      });
 
 // Body parser
 // parse application/x-www-form-urlencoded
